@@ -6,3 +6,5 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type IUserDTO = Pick<IUser, "name" | "surname" | "age">;
