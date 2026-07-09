@@ -1,19 +1,24 @@
+import { IUser, IUserDTO } from "../interfaces/user.interface";
 import { userRepository } from "../repositiries/user.repository";
+
 class UserService {
-    getAll() {
+    public getAll(): Promise<IUser[]> {
         return userRepository.getAll();
     }
-    create(user) {
+
+    public create(user: IUserDTO): Promise<IUser> {
         return userRepository.create(user);
     }
-    getById(userId) {
+
+    public getById(userId: string): Promise<IUserDTO | null> {
         return userRepository.getById(userId);
     }
-    updateById(userId, user) {
+    public updateById(userId: string, user: IUserDTO): Promise<IUser | null> {
         return userRepository.updateById(userId, user);
     }
-    deleteById(userId) {
+    public deleteById(userId: string): Promise<IUser | null> {
         return userRepository.deleteById(userId);
     }
 }
+
 export const userService = new UserService();

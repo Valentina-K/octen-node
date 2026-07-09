@@ -1,35 +1,42 @@
+import { NextFunction, Request, Response } from "express";
+
 import { StatusCodesEnum } from "../enums/status-code.enum";
+import { IUserDTO } from "../interfaces/user.interface";
 import { userService } from "../services/user.service";
+
 class UserController {
-    async getAll(req, res) {
+    public async getAll(req: Request, res: Response) {
         const data = await userService.getAll();
         res.status(StatusCodesEnum.OK).json(data);
     }
-    async create(req, res, next) {
+
+    public async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = req.body;
+            const user = req.body as IUserDTO;
             const data = await userService.create(user);
             res.status(StatusCodesEnum.CREATED).json(data);
-        }
-        catch (e) {
+        } catch (e) {
             next(e);
         }
     }
-    async getById(req, res) {
+
+    public async getById(req: Request, res: Response) {
         const { id } = req.params;
-        const data = await userService.getById(id);
+        const data = await userService.getById(id as string);
         res.status(StatusCodesEnum.OK).json(data);
     }
-    async updateById(req, res) {
+
+    public async updateById(req: Request, res: Response) {
         const { id } = req.params;
-        const user = req.body;
-        const data = await userService.updateById(id, user);
+        const user = req.body as IUserDTO;
+        const data = await userService.updateById(id as string, user);
         res.status(StatusCodesEnum.OK).json(data);
     }
-    async deleteById(req, res) {
+    public async deleteById(req: Request, res: Response) {
         const { id } = req.params;
-        await userService.deleteById(id);
+        await userService.deleteById(id as string);
         res.status(StatusCodesEnum.NO_CONTENT).end();
     }
 }
+
 export const userController = new UserController();
