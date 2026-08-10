@@ -25,7 +25,6 @@ const dbConnection = async () => {
             console.log("Database available!!!");
         }
         catch (e) {
-            console.error("Database error:", e);
             console.log("Database unavailable, wait 3 seconds");
             await new Promise((resolve) => setTimeout(resolve, 3000));
         }

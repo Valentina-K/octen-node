@@ -4,7 +4,7 @@ import { config } from "../configs/config";
 import { StatusCodesEnum } from "../enums/status-code.enum";
 import { ErrorsApi } from "../errors/errors.api";
 import { ITokenPair, ITokenPayload } from "../interfaces/token.interface";
-import { tokenRepository } from "../repositiries/token.repository";
+import { tokenRepository } from "../repositories/token.repository";
 
 class TokenService {
     public generateToken(payload: ITokenPayload): ITokenPair {
@@ -41,7 +41,9 @@ class TokenService {
                         StatusCodesEnum.BED_REQUEST,
                     );
             }
+
             return jwt.verify(token, secret) as ITokenPayload;
+
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
             throw new ErrorsApi("Invalid token", StatusCodesEnum.UNAUTHORIZED);

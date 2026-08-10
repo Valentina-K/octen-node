@@ -12,12 +12,16 @@ interface IConfig {
 }
 
 const config: IConfig = {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     PORT: process.env.PORT,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     MONGO_URI: process.env.MONGO_URI,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     JWT_ACCESS_LIFETIME: process.env.JWT_ACCESS_LIFETIME,

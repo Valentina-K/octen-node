@@ -6,7 +6,8 @@ class TokenRepository {
         return Token.create(dto);
     }
     public findByParams(params: Partial<IToken>): Promise<IToken> {
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         return Token.findOne(params);
     }
 }

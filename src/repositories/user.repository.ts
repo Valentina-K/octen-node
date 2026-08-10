@@ -19,10 +19,27 @@ class UserRepository {
         userId: string,
         user: IUserUpdateDTO,
     ): Promise<IUser | null> {
-        return User.findByIdAndUpdate(userId, user, { new: true });
+        return User.findByIdAndUpdate(userId, user, {
+            returnDocument: "after",
+        });
+    }
+    public setActiveUser(
+        userId: string,
+        isActive: boolean,
+    ): Promise<IUser | null> {
+        return User.findByIdAndUpdate(
+            userId,
+            { isActive },
+            { returnDocument: "after" },
+        );
     }
     public deleteById(userId: string): Promise<IUser | null> {
         return User.findByIdAndDelete(userId);
+    }
+    public getByEmail(email: string): Promise<IUser> {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        return User.findOne({ email });
     }
 }
 

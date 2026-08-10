@@ -12,6 +12,7 @@ class ApiMiddleware {
                 if (!isObjectIdOrHexString(id)) {
                     throw new ErrorsApi(`Invalidate [${key}: ${id}]`, 400);
                 }
+                next();
             } catch (err) {
                 next(err);
             }
@@ -27,6 +28,12 @@ class ApiMiddleware {
                 next(new ErrorsApi(er.details[0].message, 400));
             }
         };
+    }
+    public checkAdmin(req: Request, res: Response, next: NextFunction) {
+        if (res.locals.role !== "admin") {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+        next();
     }
 }
 
