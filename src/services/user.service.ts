@@ -34,15 +34,7 @@ class UserService {
         }
         return (await userRepository.updateById(userId, user)) as IUser;
     }
-    public async setActive(userId: string, isActive: boolean): Promise<IUser> {
-        const data = await userRepository.getById(userId);
 
-        if (!data) {
-            throw new ErrorsApi("User not found", StatusCodesEnum.NOT_FOUND);
-        }
-
-        return (await userRepository.setActiveUser(userId, isActive)) as IUser;
-    }
     public async deleteById(userId: string): Promise<void> {
         const data = await userRepository.getById(userId);
 
@@ -61,6 +53,19 @@ class UserService {
                 StatusCodesEnum.BED_REQUEST,
             );
         }
+    }
+
+    async isActive(_userId: string): Promise<boolean> {
+        const user = await this.getById(_userId);
+        return user.isActive;
+    }
+
+    async blockUser(id: string): Promise<IUser> {
+        return (await userRepository.blockUser(id)) as IUser;
+    }
+
+    async unblockUser(id: string): Promise<IUser> {
+        return (await userRepository.unblockUser(id)) as IUser;
     }
 }
 

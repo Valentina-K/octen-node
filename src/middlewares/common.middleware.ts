@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectSchema, ValidationError } from "joi";
 import { isObjectIdOrHexString } from "mongoose";
 
+import { RoleEnum } from "../enums/role.enum";
+import { StatusCodesEnum } from "../enums/status-code.enum";
 import { ErrorsApi } from "../errors/errors.api";
+import { ITokenPayload } from "../interfaces/token.interface";
 
 class ApiMiddleware {
     public isValidate(key: string) {
@@ -10,7 +13,10 @@ class ApiMiddleware {
             try {
                 const id = req.params[key];
                 if (!isObjectIdOrHexString(id)) {
-                    throw new ErrorsApi(`Invalidate [${key}: ${id}]`, 400);
+                    throw new ErrorsApi(
+                        `Invalidate [${key}: ${id}]`,
+                        StatusCodesEnum.BED_REQUEST,
+                    );
                 }
                 next();
             } catch (err) {
@@ -25,15 +31,28 @@ class ApiMiddleware {
                 next();
             } catch (e) {
                 const er = e as ValidationError;
-                next(new ErrorsApi(er.details[0].message, 400));
+                next(
+                    new ErrorsApi(
+                        er.details[0].message,
+                        StatusCodesEnum.BED_REQUEST,
+                    ),
+                );
             }
         };
     }
     public checkAdmin(req: Request, res: Response, next: NextFunction) {
-        if (res.locals.role !== "admin") {
-            return res.status(403).json({ error: "Forbidden" });
+        try {
+            const { role } = res.locals.tokenPayload as ITokenPayload;
+            if (role !== RoleEnum.ADMIN) {
+                throw new ErrorsApi(
+                    "No has permissions",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
+            next();
+        } catch (err) {
+            next(err);
         }
-        next();
     }
 }
 

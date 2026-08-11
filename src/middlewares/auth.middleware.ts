@@ -4,6 +4,7 @@ import { StatusCodesEnum } from "../enums/status-code.enum";
 import { ErrorsApi } from "../errors/errors.api";
 import { IRefresh } from "../interfaces/token.interface";
 import { tokenService } from "../services/token.service";
+import { userService } from "../services/user.service";
 
 class AuthMiddleware {
     public async checkAccessToken(
@@ -45,9 +46,17 @@ class AuthMiddleware {
                     StatusCodesEnum.UNAUTHORIZED,
                 );
             }
+            const isActive = await userService.isActive(tokenPayload._userId);
+
+            if (!isActive) {
+                throw new ErrorsApi(
+                    "Account is not active",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
+
             //чтобы сохранить что-либо в контексте одного запроса используется объект res.locals
             res.locals.tokenPayload = tokenPayload;
-            res.locals.role = tokenPayload.role;
 
             next();
         } catch (e) {
@@ -89,12 +98,6 @@ class AuthMiddleware {
             next(e);
         }
     }
-
-    public async checkIsActive(
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ) {}
 }
 
 export const authMiddleware = new AuthMiddleware();

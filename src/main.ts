@@ -31,8 +31,7 @@ const dbConnection = async () => {
             await mongoose.connect(config.MONGO_URI as string);
             dbCon = true;
             console.log("Database available!!!");
-        } catch (e) {
-            //console.error("Database error:", e);
+        } catch {
             console.log("Database unavailable, wait 3 seconds");
             await new Promise((resolve) => setTimeout(resolve, 3000));
         }

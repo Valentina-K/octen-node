@@ -23,13 +23,17 @@ class UserRepository {
             returnDocument: "after",
         });
     }
-    public setActiveUser(
-        userId: string,
-        isActive: boolean,
-    ): Promise<IUser | null> {
+    public unblockUser(userId: string): Promise<IUser | null> {
         return User.findByIdAndUpdate(
             userId,
-            { isActive },
+            { isActive: true },
+            { returnDocument: "after" },
+        );
+    }
+    public blockUser(userId: string): Promise<IUser | null> {
+        return User.findByIdAndUpdate(
+            userId,
+            { isActive: false },
             { returnDocument: "after" },
         );
     }

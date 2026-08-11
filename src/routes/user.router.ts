@@ -16,13 +16,19 @@ router.put(
     apiMiddleware.validateBody(UserValidator.update),
     userController.updateById,
 );
-router.put(
-    "/:id/isActive",
+router.patch(
+    "/:id/block",
     authMiddleware.checkAccessToken,
     apiMiddleware.isValidate("id"),
     apiMiddleware.checkAdmin,
-    apiMiddleware.validateBody(UserValidator.setActive),
-    userController.setActive,
+    userController.blockUser,
+);
+router.patch(
+    "/:id/unblock",
+    authMiddleware.checkAccessToken,
+    apiMiddleware.isValidate("id"),
+    apiMiddleware.checkAdmin,
+    userController.unblockUser,
 );
 router.delete(
     "/:id",
